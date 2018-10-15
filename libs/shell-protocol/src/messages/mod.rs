@@ -51,12 +51,17 @@ pub enum Message {
         channel_id: u32,
         data: String,
     },
+    Stdin {
+        channel_id: u32,
+        data: String,
+    },
 }
 
 pub mod exit;
 pub mod pid;
 pub mod spawn;
 pub mod stderr;
+pub mod stdin;
 pub mod stdout;
 
 pub fn parse_message(message: ChannelMessage) -> Result<Message, ProtocolError> {
@@ -65,6 +70,8 @@ pub fn parse_message(message: ChannelMessage) -> Result<Message, ProtocolError> 
     } else if message.name == "stdout" {
         Ok(stdout::from_cbor(&message)?)
     } else if message.name == "stderr" {
+        Ok(stderr::from_cbor(&message)?)
+    } else if message.name == "stdin" {
         Ok(stderr::from_cbor(&message)?)
     } else if message.name == "pid" {
         Ok(pid::from_cbor(&message)?)
